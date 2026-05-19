@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Chat App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='0' y='14'>💬</text></svg>">
+  </head>
+  <body class="bg-slate-900 text-slate-100">
+    <div class="min-h-screen flex items-center justify-center p-4">
+      <div class="w-full max-w-6xl bg-slate-800 shadow-2xl rounded-3xl overflow-hidden border border-slate-700">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-0">
+          <div class="lg:col-span-1 bg-slate-950 p-6 flex flex-col gap-4">
+            <div>
+              <h1 class="text-3xl font-bold">Chat App</h1>
+              <p class="text-slate-400 mt-1">Public rooms, private messages, online status.</p>
+            </div>
+
+            <div id="authView" class="space-y-4">
+              <div class="space-y-2">
+                <input id="emailInput" type="email" placeholder="Email" class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" />
+                <input id="passwordInput" type="password" placeholder="Password" class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" />
+                <input id="usernameInput" type="text" placeholder="Username (register only)" class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100" />
+              </div>
+              <div class="grid gap-3">
+                <button id="loginBtn" class="w-full rounded-2xl bg-cyan-500 py-3 font-semibold text-slate-950 hover:bg-cyan-400">Login</button>
+                <button id="registerBtn" class="w-full rounded-2xl border border-slate-700 py-3 font-semibold text-slate-100 hover:bg-slate-900">Register</button>
+              </div>
+              <p id="authMessage" class="text-sm text-rose-400"></p>
+            </div>
+
+            <div id="navPanel" class="hidden flex-col gap-4">
+              <div class="space-y-2">
+                <p class="text-slate-400">Logged in as <span id="currentUser" class="font-semibold text-white"></span></p>
+              </div>
+              <button id="logoutBtn" class="rounded-2xl border border-slate-700 py-3 text-slate-100 hover:bg-slate-900">Logout</button>
+              <div class="rounded-3xl border border-slate-700 bg-slate-900 p-4 space-y-4">
+                <h2 class="font-semibold">Create room</h2>
+                <input id="roomNameInput" type="text" placeholder="Room name" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100" />
+                <input id="roomDescInput" type="text" placeholder="Description" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100" />
+                <button id="createRoomBtn" class="w-full rounded-2xl bg-slate-700 py-3 text-white hover:bg-slate-600">Create</button>
+              </div>
+              <div class="rounded-3xl border border-slate-700 bg-slate-900 p-4">
+                <h2 class="font-semibold mb-3">Online users</h2>
+                <div id="onlineUsersList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 p-6 flex flex-col gap-4">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div class="rounded-3xl border border-slate-700 bg-slate-950 p-4">
+                <div class="flex items-center justify-between mb-4">
+                  <h2 class="font-semibold">Rooms</h2>
+                  <span id="roomCount" class="text-slate-400 text-sm"></span>
+                </div>
+                <div id="roomList" class="space-y-3 max-h-64 overflow-y-auto"></div>
+              </div>
+              <div class="rounded-3xl border border-slate-700 bg-slate-950 p-4">
+                <div class="flex items-center justify-between mb-4">
+                  <h2 class="font-semibold">Direct chats</h2>
+                </div>
+                <div id="userList" class="space-y-3 max-h-64 overflow-y-auto"></div>
+              </div>
+            </div>
+
+            <div class="flex-1 rounded-3xl border border-slate-700 bg-slate-950 p-4 flex flex-col">
+              <div class="mb-4 flex items-center justify-between gap-4">
+                <div>
+                  <h2 id="chatTitle" class="text-xl font-semibold">Select a room or user</h2>
+                  <p id="chatSubtitle" class="text-slate-400 text-sm">Chat history loads here.</p>
+                </div>
+                <div id="typingIndicator" class="text-sm text-cyan-300"></div>
+              </div>
+              <div id="messageFeed" class="flex-1 space-y-3 overflow-y-auto rounded-3xl border border-slate-800 bg-slate-900 p-4"></div>
+              <div class="mt-4 flex gap-3">
+                <input id="messageInput" type="text" placeholder="Type your message..." class="flex-1 rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100" disabled />
+                <button id="sendBtn" class="rounded-2xl bg-cyan-500 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-400" disabled>Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
